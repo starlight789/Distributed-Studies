@@ -6,11 +6,11 @@ Ceph Cache Tiering
 
 ## 1.2. Read Forward
 - client 发起读请求，对象不在 cache pool 中，出现 cache miss 状态，就返回 redirect 信息给客户端，客户端再根据返回的信息再次直接向 base pool 发起读请求
-![](/Distributed-Studies/笔记/image/cache/read-forward.png) 
+![](/Distributed-Studies/笔记/cache/image/read-forward.png) 
 
 ## 1.3. Read Proxy
 - 此模式将使用缓存层中已经存在的任何对象，但是如果一个对象不在缓存中，则请求将代理到基层。这对于将writeback模式转换为禁用的缓存非常有用，因为它允许工作负载在缓存耗尽时正常工作，而不需要向缓存添加任何新对象。
-![](/Distributed-Studies/笔记/image/cache/read-proxy.png) 
+![](/Distributed-Studies/笔记/cache/image/read-proxy.png) 
 
 ## 1.4. Read Only
 - 仅在读取操作时将对象提升到缓存中；写操作被转发到基本层。该种模式下，cache pool 设置成单副本，极大减少缓存空间的占用，当cache pool层失效时，也不会有数据丢失。
@@ -64,11 +64,11 @@ ceph/src/osd/HitSet.h/class BloomHitSet
 采用了压缩的 Bloom Filter 的方式来记录对象是否在缓存中，进一步减少了内存占用空间。
 
 # 3. IO
-![](/Distributed-Studies/笔记/image/cache/cache-process.png)  
+![](/Distributed-Studies/笔记/cache/image/cache-process.png)  
 - WriteBack 策略：
-![](/Distributed-Studies/笔记/image/cache/WriteBackProcess.png)  
+![](/Distributed-Studies/笔记/cache/image/WriteBackProcess.png)  
 - 针对其中涉及到的几个封装好的方法的操作： do_cache_redirect， do_proxy_read， do_proxy_write, promote_object
-![](/Distributed-Studies/笔记/image/cache/proxy-read.png)  
+![](/Distributed-Studies/笔记/cache/image/proxy-read.png)  
 - do_cache_redirect ：客户端请求cache pool，cache pool告诉客户端你应该去base pool中请求，客户端收到应答后，再次发送请求到base pool中请求数据，由base pool告诉客户端请求完成。
   <details close> <summary>do_cache_redirect</summary>
 
